@@ -92,3 +92,30 @@ $ docker compose build web
 
 `DATABASE_URL` -- адрес для подключения к базе данных PostgreSQL. Другие СУБД сайт не
 поддерживает. [Формат записи](https://github.com/jacobian/dj-database-url#url-schema).
+
+## Запуск сайта через K&S
+
+Перейдите в директорию проекта, где находятся файлы `.yaml`.
+
+В этой директории необходимо создать файл `.env` и заполнить его **обязательными** переменными окружения:
+
+- SECRET_KEY
+- DATABASE_URL
+
+Далее, находясь в этой же директории, введите команду, которая создает Secret:
+
+```bash
+kubectl create secret generic django-secret --from-env-file=.env
+```
+
+Для создания и запуска деплоймента, введите команду:
+
+```bash
+kubectl apply -f deployment.yaml
+```
+
+Для запуска сервиса, введите команду:
+
+```bash
+kubectl apply -f service.yaml   
+```
