@@ -102,6 +102,12 @@ $ docker compose build web
 - SECRET_KEY
 - DATABASE_URL
 
+Создайте образ в minikube:
+
+```bash
+minikube image build . -t django-app:latest
+```
+
 Далее, находясь в этой же директории, введите команду, которая создает Secret:
 
 ```bash
