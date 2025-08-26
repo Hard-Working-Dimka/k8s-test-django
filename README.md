@@ -95,20 +95,22 @@ $ docker compose build web
 
 ## Запуск сайта через K&S
 
-Перейдите в директорию проекта, где находятся файл `Dockerfile`.
+Перейдите в основной каталог проекта, где находится файл `docker-compose.yml`
 
 В этой директории необходимо создать файл `.env` и заполнить его **обязательными** переменными окружения:
 
 - SECRET_KEY
 - DATABASE_URL
 
-Создайте образ в minikube:
+После заполнения переменных окружения перейдите в каталог `backend_main_django`.
+
+Создайте образ в minikube, запустив команду:
 
 ```bash
 minikube image build . -t django-app:latest
 ```
 
-Далее, перейдите в директорию выше, где находятся файлы `.yaml` и введите команду, которая создает Secret:
+Далее, перейдите в каталог `k&s` (находится каталогом выше) и введите команду, которая создает Secret:
 
 ```bash
 kubectl create secret generic django-secret --from-env-file=.env
@@ -132,8 +134,23 @@ kubectl apply -f service.yaml
 kubectl apply -f ingress.yaml   
 ```
 
-Для доступности сайта через браузер необходимо добавить в файл [`hosts`](https://help.reg.ru/support/dns-servery-i-nastroyka-zony/rabota-s-dns-serverami/fayl-hosts-gde-nakhoditsya-i-kak-yego-izmenit) запись
+Для доступности сайта через браузер необходимо добавить в файл [
+`hosts`](https://help.reg.ru/support/dns-servery-i-nastroyka-zony/rabota-s-dns-serverami/fayl-hosts-gde-nakhoditsya-i-kak-yego-izmenit)
+запись
 
 ```bash
 <minicube_ip> star-burger.test
 ```
+
+## Management команды в k&s
+
+Перед выполнением команд необходимо быть в каталоге `k&s` (находится внутри проекта).
+
+### Регулярное удаление сессий.
+
+Запускается командой
+
+```bash
+kubectl apply -f clearsissions-cronjob.yaml
+```
+
