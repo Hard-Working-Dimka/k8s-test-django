@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate
+spec:
+  template:
+    spec:
+      containers:
+        - name: migrate
+          image: docker.io/library/django-app:latest
+          envFrom:
+            - secretRef:
+                name: django-secret
+          command: ["python", "manage.py", "migrate"]
+      restartPolicy: Never
+  backoffLimit: 4
+  

@@ -148,9 +148,20 @@ kubectl apply -f ingress.yaml
 
 ### Регулярное удаление сессий.
 
-Запускается командой
+Запускается командой:
 
 ```bash
-kubectl apply -f clearsissions-cronjob.yaml
+kubectl apply -f clearsessions-cronjob.yaml
+```
+
+По умолчанию, сессии удаляются каждую минуту. При необходимости можно значение изменить в файле
+`clearsissions-cronjob.yaml`.
+
+### Migrate
+
+Запускается командой:
+
+```bash
+kubectl apply -f migrate-job.yaml
 ```
 
