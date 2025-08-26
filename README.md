@@ -95,7 +95,7 @@ $ docker compose build web
 
 ## Запуск сайта через K&S
 
-Перейдите в директорию проекта, где находятся файлы `.yaml`.
+Перейдите в директорию проекта, где находятся файл `Dockerfile`.
 
 В этой директории необходимо создать файл `.env` и заполнить его **обязательными** переменными окружения:
 
@@ -108,7 +108,7 @@ $ docker compose build web
 minikube image build . -t django-app:latest
 ```
 
-Далее, находясь в этой же директории, введите команду, которая создает Secret:
+Далее, перейдите в директорию выше, где находятся файлы `.yaml` и введите команду, которая создает Secret:
 
 ```bash
 kubectl create secret generic django-secret --from-env-file=.env
@@ -124,4 +124,16 @@ kubectl apply -f deployment.yaml
 
 ```bash
 kubectl apply -f service.yaml   
+```
+
+Для запуска ingress, введите команду:
+
+```bash
+kubectl apply -f ingress.yaml   
+```
+
+Для доступности сайта через браузер необходимо добавить в файл [`hosts`](https://help.reg.ru/support/dns-servery-i-nastroyka-zony/rabota-s-dns-serverami/fayl-hosts-gde-nakhoditsya-i-kak-yego-izmenit) запись
+
+```bash
+<minicube_ip> star-burger.test
 ```
