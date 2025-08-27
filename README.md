@@ -149,7 +149,7 @@ kubectl apply -f ingress.yaml
 Введите команду, заполнив данные БД:
 
 ```bash
-helm uninstall my-postgres; helm install my-postgres oci://registry-1.docker.io/bitnamicharts/postgresql --set auth.database=<DATABASE> --set auth.username=<USERNAME> --set auth.password=<PASSWORD> --set primary.service.type=NodePort
+helm install my-postgres oci://registry-1.docker.io/bitnamicharts/postgresql --set auth.database=<DATABASE> --set auth.username=<USERNAME> --set auth.password=<PASSWORD> --set primary.service.type=NodePort
 ```
 
 Для подключения к Django, в database url используйте вместо ip, название сервиса:
