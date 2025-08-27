@@ -152,6 +152,12 @@ kubectl apply -f ingress.yaml
 helm uninstall my-postgres; helm install my-postgres oci://registry-1.docker.io/bitnamicharts/postgresql --set auth.database=<DATABASE> --set auth.username=<USERNAME> --set auth.password=<PASSWORD> --set primary.service.type=NodePort
 ```
 
+Для подключения к Django, в database url используйте вместо ip, название сервиса:
+
+```bash
+postgres://<ПОЛЬЗОВАТЕЛЬ>:<ПАРОЛЬ>@<СЕРВИС>:<ПОРТ>/<БАЗА>
+```
+
 ## Management команды в k&s
 
 Перед выполнением команд необходимо быть в каталоге `k&s` (находится внутри проекта).
