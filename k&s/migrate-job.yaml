@@ -3,15 +3,17 @@ kind: Job
 metadata:
   name: migrate
 spec:
+  ttlSecondsAfterFinished: 120
   template:
     spec:
       containers:
         - name: migrate
           image: docker.io/library/django-app:latest
+          imagePullPolicy: IfNotPresent
           envFrom:
             - secretRef:
                 name: django-secret
-          command: ["python", "manage.py", "migrate"]
+          command: ["python", "manage.py", "migrate", "--noinput"]
       restartPolicy: Never
   backoffLimit: 4
   

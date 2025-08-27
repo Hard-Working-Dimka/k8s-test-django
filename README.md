@@ -93,7 +93,7 @@ $ docker compose build web
 `DATABASE_URL` -- адрес для подключения к базе данных PostgreSQL. Другие СУБД сайт не
 поддерживает. [Формат записи](https://github.com/jacobian/dj-database-url#url-schema).
 
-## Запуск сайта через K&S
+## Запуск сайта через K&S minikube
 
 Перейдите в основной каталог проекта, где находится файл `docker-compose.yml`
 
@@ -140,6 +140,16 @@ kubectl apply -f ingress.yaml
 
 ```bash
 <minicube_ip> star-burger.test
+```
+
+## Запуск базы данных
+
+Установите [helm](https://helm.sh/)
+
+Введите команду, заполнив данные БД:
+
+```bash
+helm uninstall my-postgres; helm install my-postgres oci://registry-1.docker.io/bitnamicharts/postgresql --set auth.database=<DATABASE> --set auth.username=<USERNAME> --set auth.password=<PASSWORD> --set primary.service.type=NodePort
 ```
 
 ## Management команды в k&s
