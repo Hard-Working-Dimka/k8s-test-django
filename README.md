@@ -181,3 +181,36 @@ kubectl apply -f clearsessions-cronjob.yaml
 kubectl apply -f migrate-job.yaml
 ```
 
+## Запуск сайта в dev окружении в кластере
+
+### Установка SSL-сертификата
+
+Скачайте сертификат по [документации](https://yandex.cloud/ru/docs/managed-postgresql/operations/connect)
+
+Далее введите команду для создания секрета с SSL-сертификатом:
+
+```bash
+kubectl create secret generic ssl-certificate --from-file=root.crt=<PATH_TO_SSL_CERTIFICATE_FILE> --namespace=<YOUR_NAMESPACE>
+```
+
+### Сборка/публикация образов с DockerHub
+Для сборки и публикаций образов dev окружения используется [репозиторий](https://hub.docker.com/repository/docker/harddimka/dev-kubernetes-django/general) на DockerHub.
+
+Для просмотра хеша коммита воспользуйтесь [репозиторием](https://github.com/Hard-Working-Dimka/k8s-test-django) или введите в терминале команду:
+```bash
+git log
+```
+
+Для сборки образа перейдите в директорию с DockerFile и введите команду:
+```bash
+docker build -t harddimka/dev-kubernetes-django:<YOUR_COOMIT_HASH> .
+```
+Для публикации образа на DockerHub введите команду: 
+```bash
+docker push harddimka/dev-kubernetes-django:<YOUR_COOMIT_HASH>
+```
+
+Для загрузки образа с DockerHub введите команду:
+```bash
+docker push harddimka/dev-kubernetes-django:tagname
+```
