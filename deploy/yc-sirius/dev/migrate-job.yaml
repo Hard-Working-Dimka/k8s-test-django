@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate
+spec:
+  ttlSecondsAfterFinished: 120
+  template:
+    spec:
+      containers:
+        - name: migrate
+          image: harddimka/dev-kubernetes-django:1185f635a5db0a0f939ff27d6d80d3e73de76443
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: django-secret
+          command: ["python", "manage.py", "migrate", "--noinput"]
+      restartPolicy: Never
+  backoffLimit: 4
+  

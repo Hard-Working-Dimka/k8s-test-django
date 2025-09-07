@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: clearsessions
+spec:
+  schedule: "* * * * *" #	Run every minute
+  startingDeadlineSeconds: 100
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 15
+      template:
+        spec:
+          containers:
+            - name: clearsessions
+              image: harddimka/dev-kubernetes-django:1185f635a5db0a0f939ff27d6d80d3e73de76443
+              imagePullPolicy: IfNotPresent
+              envFrom:
+                - secretRef:
+                    name: django-secret
+              command: [ "python", "manage.py", "clearsessions" ]
+          restartPolicy: OnFailure

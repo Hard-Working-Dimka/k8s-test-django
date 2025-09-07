@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-app
+  labels:
+    app: django-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-app
+  template:
+    metadata:
+      name: django-app
+      labels:
+        app: django-app
+    spec:
+      containers:
+        - name: django-app
+          image: harddimka/dev-kubernetes-django:1185f635a5db0a0f939ff27d6d80d3e73de76443
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: ssl-certificate
+              mountPath: /root/.postgresql/
+
+          envFrom:
+            - secretRef:
+                name: django-secret
+          ports:
+            - containerPort: 80
+              protocol: TCP
+      volumes:
+        - name: ssl-certificate
+          secret:
+            secretName: ssl-certificate
+            defaultMode: 0644
+      restartPolicy: Always

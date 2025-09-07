@@ -183,6 +183,8 @@ kubectl apply -f migrate-job.yaml
 
 ## Запуск сайта в dev окружении в кластере
 
+Выделены [ресурсы.](https://sirius-env-registry.website.yandexcloud.net/edu-dmitry-zavyalov.html)
+
 ### Установка SSL-сертификата
 
 Скачайте сертификат по [документации](https://yandex.cloud/ru/docs/managed-postgresql/operations/connect)
@@ -194,7 +196,7 @@ kubectl create secret generic ssl-certificate --from-file=root.crt=<PATH_TO_SSL_
 ```
 
 ### Сборка/публикация образов с DockerHub
-Для сборки и публикаций образов dev окружения используется [репозиторий](https://hub.docker.com/repository/docker/harddimka/dev-kubernetes-django/general) на DockerHub.
+Для сборки и публикаций образов dev окружения используется [репозиторий](https://hub.docker.com/r/harddimka/dev-kubernetes-django) на DockerHub.
 
 Для просмотра хеша коммита воспользуйтесь [репозиторием](https://github.com/Hard-Working-Dimka/k8s-test-django) или введите в терминале команду:
 ```bash
@@ -214,3 +216,47 @@ docker push harddimka/dev-kubernetes-django:<YOUR_COOMIT_HASH>
 ```bash
 docker push harddimka/dev-kubernetes-django:tagname
 ```
+
+### Что требуется для запуска сайта
+Перед запуском сайта должна работать база данных.
+
+Для запуска сайта необходим секрет с [переменные окружения](#переменные-окружения).
+Создайте файл `.env` и выполните команду:
+
+```bash
+kubectl create secret generic django-secret --from-env-file=.env --namespace=<YOUR_NAMESPACE>
+```
+Для запуска свежей версии сайта перейдите в каталог `deploy/yc-sirius/dev` и измените значение в файле `deployment.yaml`:
+
+```bash
+image: harddimka/dev-kubernetes-django:<HASH_OF_A_COMMIT>
+```
+
+## Management команды
+
+Перед выполнением команд необходимо быть в каталоге `deploy/yc-sirius/dev` (находится внутри проекта).
+
+Также необходимо, чтобы в файлах `migrate-job.yaml` и `clearsessions-cronjob.yaml` в строке `image` была указана версия, которая равна хешу коммита в используемом `deployment`.
+
+### Регулярное удаление сессий.
+
+Запускается командой:
+
+```bash
+kubectl apply -f clearsessions-cronjob.yaml --namespace=<YOUR_NAMESPACE>
+```
+
+По умолчанию, сессии удаляются каждую минуту. При необходимости можно значение изменить в файле
+`clearsissions-cronjob.yaml`.
+
+### Migrate
+
+Запускается командой:
+
+```bash
+kubectl apply -f migrate-job.yaml --namespace=<YOUR_NAMESPACE>
+```
+
+## Пример работающего сайта
+
+[Сайт](https://edu-dmitry-zavyalov.yc-sirius-dev.pelid.team/)
