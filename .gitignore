@@ -3,3 +3,5 @@ __pycache__/
 *.py[cod]
 *$py.class
 local-minikube-virtualbox/.env
+deploy/yc-sirius/dev/.env
+local-minikube-virtualbox/.env
